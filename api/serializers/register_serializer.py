@@ -35,7 +35,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"password": "Password fields didn't match."}
             )
-
         return attrs
 
     def create(self, validated_data):
@@ -54,5 +53,4 @@ class RegisterSerializer(serializers.ModelSerializer):
             weight_unit=validated_data["weight_unit"],
         )
         user.save()
-
         return user

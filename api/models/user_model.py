@@ -19,6 +19,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(max_length=255, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     height = models.FloatField(_("Height"), blank=True)
+    weight = models.FloatField(_("Weight"), blank=True)
     height_unit = models.CharField(_("Height Unit"), max_length=100, blank=True)
     weight_unit = models.CharField(_("Weight Unit"), max_length=100, blank=True)
     age = models.SmallIntegerField(_("Age"), blank=True)
