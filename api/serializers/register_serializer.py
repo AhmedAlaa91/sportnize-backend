@@ -28,6 +28,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             "school",
             "height_unit",
             "weight_unit",
+            "phone",
+            "address"
         )
 
     def validate(self, attrs):
@@ -35,6 +37,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"password": "Password fields didn't match."}
             )
+
         return attrs
 
     def create(self, validated_data):
@@ -51,6 +54,41 @@ class RegisterSerializer(serializers.ModelSerializer):
             school=validated_data["school"],
             height_unit=validated_data["height_unit"],
             weight_unit=validated_data["weight_unit"],
+            address=validated_data["address"],
+            phone=validated_data["phone"]
+
+        )
+        user.save()
+
+        return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password]
+    )
+    password2 = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = User
+        fields = (
+            "username",
+            "password",
+            "password2",
+        )
+
+    def validate(self, attrs):
+        if attrs["password"] != attrs["password2"]:
+            raise serializers.ValidationError(
+                {"password": "Password fields didn't match."}
+            )
+
+        return attrs
+
+    def create(self, validated_data):
+        user = User.objects.register_user(
+            username=validated_data["username"],
+            password=validated_data["password"],
         )
         user.save()
         return user

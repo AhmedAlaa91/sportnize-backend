@@ -4,6 +4,29 @@ from django.utils.translation import gettext_lazy as _
 
 
 class UserManager(BaseUserManager):
+    def register_user(
+        self,
+        username,
+        password=None,
+        commit=True,
+    ):
+        """
+        Creates and saves a User with the given email, first name, last name
+        and password.
+        """
+        if not username:
+            raise ValueError(_("Users must have an username"))
+
+        user = self.model(
+            username=username,
+        )
+
+        user.set_password(password)
+        user.is_active = True
+        if commit:
+            user.save(using=self._db)
+        return user
+
     def create_user(
         self,
         email,
@@ -15,6 +38,7 @@ class UserManager(BaseUserManager):
         weight,
         age,
         school,
+        sport,
         username,
         height_unit,
         weight_unit,
@@ -42,6 +66,7 @@ class UserManager(BaseUserManager):
             age=age,
             weight=weight,
             school=school,
+            sport=sport,
             username=username,
             height_unit=height_unit,
             weight_unit=weight_unit,
@@ -65,6 +90,7 @@ class UserManager(BaseUserManager):
         weight,
         age,
         school,
+        sport,
         username,
         height_unit,
         weight_unit,
@@ -84,6 +110,7 @@ class UserManager(BaseUserManager):
             age=age,
             weight=weight,
             school=school,
+            sport=sport,
             username=username,
             height_unit=height_unit,
             weight_unit=weight_unit,
@@ -106,6 +133,7 @@ class UserManager(BaseUserManager):
         weight,
         age,
         school,
+        sport,
         username,
         height_unit,
         weight_unit,
@@ -125,6 +153,7 @@ class UserManager(BaseUserManager):
             age=age,
             weight=weight,
             school=school,
+            sport=sport,
             username=username,
             height_unit=height_unit,
             weight_unit=weight_unit,

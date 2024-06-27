@@ -12,19 +12,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name=_("email address"),
         max_length=255,
         unique=True,
+        null=True,
     )
     username = models.CharField(_("Username"), max_length=150, blank=True, unique=True)
-    first_name = models.CharField(_("first name"), max_length=30, blank=True)
-    last_name = models.CharField(_("last name"), max_length=150, blank=True)
-    phone = models.CharField(max_length=255, null=True, blank=True)
+    first_name = models.CharField(_("first name"), max_length=30, blank=True, null=True,)
+    last_name = models.CharField(_("last name"), max_length=150, blank=True, null=True,)
+    phone = models.CharField(max_length=255, blank=True, null=True,)
     timestamp = models.DateTimeField(auto_now_add=True)
-    height = models.FloatField(_("Height"), blank=True)
-    weight = models.FloatField(_("Weight"), blank=True)
-    height_unit = models.CharField(_("Height Unit"), max_length=100, blank=True)
-    weight_unit = models.CharField(_("Weight Unit"), max_length=100, blank=True)
-    age = models.SmallIntegerField(_("Age"), blank=True)
-    school = models.CharField(_("School"), max_length=150, blank=True)
-    sport = models.CharField(_("Sport"), max_length=150, blank=True)
+    height = models.FloatField(_("Height"), blank=True, null=True,)
+    weight = models.FloatField(_("Weight"), blank=True, null=True,)
+    height_unit = models.CharField(_("Height Unit"), max_length=100, blank=True, null=True,)
+    weight_unit = models.CharField(_("Weight Unit"), max_length=100, blank=True, null=True,)
+    age = models.SmallIntegerField(_("Age"), blank=True, null=True,)
+    school = models.CharField(_("School"), max_length=150, blank=True, null=True,)
+    sport = models.CharField(_("Sport"), max_length=150, blank=True, null=True,)
     address = models.CharField(
         _("Address"),
         max_length=255,
@@ -37,6 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_(
             "Designates whether this user should be treated as an Admin. ",
         ),
+        null=True,
     )
     is_client = models.BooleanField(
         _("Client"),
@@ -44,6 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_(
             "Designates whether this user should be treated as a Client. ",
         ),
+        null=True,
     )
     USER_TYPE_CHOICES = (
         (1, "Admin"),
@@ -66,6 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             "Designates whether this user should be treated as active. "
             "Unselect this instead of deleting accounts.",
         ),
+        null=True,
     )
     is_staff = models.BooleanField(
         _("staff status"),
@@ -73,6 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_(
             "Designates whether the user can log into this admin site.",
         ),
+        null=True,
     )
     # is_superuser field provided by PermissionsMixin
     # groups field provided by PermissionsMixin
@@ -85,8 +90,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name", "phone", "address"]
+    USERNAME_FIELD = "username"
 
     def get_full_name(self):
         """

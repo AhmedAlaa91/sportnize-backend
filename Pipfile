@@ -16,6 +16,7 @@ drf-yasg = "*"
 
 [dev-packages]
 pre-commit = "*"
+autopep8 = "*"
 
 [requires]
 python_version = "3.11"

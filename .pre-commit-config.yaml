@@ -20,6 +20,10 @@ repos:
     hooks:
      -  id: autoflake
         args: ["--remove-all-unused-imports", "--in-place" , "--exclude=__init__.py"]
+  - repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v1.5.7 # You can specify the version you want to use
+    hooks:
+      - id: autopep8
 
   - repo: https://github.com/pycqa/flake8
     rev: 6.1.0

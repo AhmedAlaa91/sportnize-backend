@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from api.models import User
-from api.serializers import RegisterSerializer
+from api.serializers import RegisterSerializer, UserSerializer
 
 
 class RegisterView(generics.CreateAPIView):
@@ -40,3 +40,16 @@ def testEndPoint(request):
         except json.JSONDecodeError:
             return Response("Invalid JSON data", status.HTTP_400_BAD_REQUEST)
     return Response("Invalid JSON data", status.HTTP_400_BAD_REQUEST)
+
+
+class EditProfileView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = RegisterSerializer
+    http_method_names = ['put']
+
+
+class CreateUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = UserSerializer
