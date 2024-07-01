@@ -7,17 +7,11 @@ from api.models import User
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password]
-    )
-    password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
         fields = (
             "username",
-            "password",
-            "password2",
             "email",
             "first_name",
             "last_name",
@@ -28,23 +22,16 @@ class RegisterSerializer(serializers.ModelSerializer):
             "school",
             "height_unit",
             "weight_unit",
-            "phone",
-            "address"
         )
 
     def validate(self, attrs):
-        if attrs["password"] != attrs["password2"]:
-            raise serializers.ValidationError(
-                {"password": "Password fields didn't match."}
-            )
+        
 
         return attrs
 
     def create(self, validated_data):
         user = User.objects.create_client(
-            username=validated_data["username"],
             email=validated_data["email"],
-            password=validated_data["password"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
             height=validated_data["height"],
@@ -54,9 +41,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             school=validated_data["school"],
             height_unit=validated_data["height_unit"],
             weight_unit=validated_data["weight_unit"],
-            address=validated_data["address"],
-            phone=validated_data["phone"]
-
         )
         user.save()
 

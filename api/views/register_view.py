@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import json
 
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-
+from rest_framework.views import APIView
 from api.models import User
 from api.serializers import RegisterSerializer, UserSerializer
 
@@ -44,9 +45,19 @@ def testEndPoint(request):
 
 class EditProfileView(generics.UpdateAPIView):
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (IsAuthenticated,)
     serializer_class = RegisterSerializer
     http_method_names = ['put']
+
+class GetProfileView(APIView):
+    #permission_classes = [IsAuthenticated]
+    serializer_class = RegisterSerializer
+
+    def get(self, request, pk, format=None):
+        user_id = pk  # Get the authenticated user's ID
+        user = get_object_or_404(User, pk=user_id)  # Retrieve the authenticated user
+        serializer = self.serializer_class(user)
+        return Response(serializer.data)
 
 
 class CreateUserView(generics.CreateAPIView):
