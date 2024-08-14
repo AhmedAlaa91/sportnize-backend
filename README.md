@@ -5,5 +5,5 @@
 2. Go to terminal change directory to sportnize-backend 
 3. In terminal , pip install -r requirements.txt
 4. In terminal , python manage.py makemigrations
-5. In terminal , python manage.py makemigrations
+5. In terminal , python manage.py migrate
 6. In ternminal , run python manage.py runserver 8080
