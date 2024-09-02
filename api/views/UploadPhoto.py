@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -34,11 +35,13 @@ class PhotoUploadView(APIView):
             for file in photo_files
         ]
 
+        photo_files_sorted = sorted(photo_files, key=lambda x: os.path.getmtime(os.path.join(settings.MEDIA_ROOT, 'photos', x)), reverse=True)
+
         photo_list = []
-        for idx, filename in enumerate(photo_files, start=1):
+        for idx, filename in enumerate(photo_files_sorted, start=1):
             # Construct the full image URL
             image_url = request.build_absolute_uri(f"{settings.MEDIA_URL}photos/{filename}")
-            caption = f"Image {idx}"
+            caption = f"{filename}"
             photo_list.append({
                 'image_url': image_url,
                 'caption': caption
@@ -47,3 +50,19 @@ class PhotoUploadView(APIView):
         #return Response(photo_list, status=status.HTTP_200_OK)
 
         return Response({'photos': photo_list}, status=status.HTTP_200_OK)
+    
+
+    def delete(self, request, *args, **kwargs):
+        fileName = request.data.get('fileName')
+        
+        if not fileName:
+            return JsonResponse({'error': 'No file path provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the file exists before attempting to delete
+        if not default_storage.exists('photos/'+fileName):
+            return JsonResponse({'error': 'File not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Delete the file
+        default_storage.delete('photos/'+fileName)
+
+        return JsonResponse({'message': 'Photo deleted successfully'}, status=status.HTTP_200_OK)
